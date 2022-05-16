@@ -2,34 +2,17 @@
 
 So, for my project there is a fictional small company that has a problem managing all of their computers. In my project, I'm going to solve that using Salt. Every computer will be managed from a master computer using Salt-states. The computers will be set up with company decided default programs and configurations. This way the set up will be near automatic and done with one command.
 
-Since it's a fictional problem, I'm going to simulate a small company myself using virtual machines with vagrant. I'll start the whole thing with an empty virtual Linux.
+Since it's a fictional problem, I'm going to simulate a small company myself using virtual machines with Vagrant. I'll start the whole thing with an empty virtual Linux.
 
-First of all I'm going to make everything manually and test that everything works. After that I'm going start with the automation of it. So for now, I've got a fresh Debian and I'll start with installing everything thats needed and configuring the programs. Update after hours of troubleshooting --> I legit battled with getting vagrant and a new virtual Debian working but after 4 or more hours, I could not solve it. So for now I'm actually starting with a real PC that has Debian 11 running on it.
+First of all I'm going to make everything manually and test that everything works. After that I'm going start with the automation of it. So for now, I've got a fresh Debian and I'll start with installing everything thats needed and configuring the programs. Update after hours of troubleshooting --> I legit battled with getting Vagrant and a new virtual Debian working but after 4 or more hours, I could not solve it. So for now I'm actually starting with a real PC that has Debian 11 running on it.
 
-I setup the with "debian-live-11.2.0-amd64-xfce+nonfree.iso" that was put on an USB stick. After that I installed the OS normally and everything went fine. After that I installed a few programs like SSH, Vagrant and Virtualbox. Virtualbox was not available in the Debian repo so I had to go with their instructions that were on their site. (https://wiki.debian.org/VirtualBox). Next, I took the Vagrantfile from [Tero's](https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/) article about Vagrant and two machines. That way the Vagrant machines popped up normally without any problems. Next up was putting the the master machine itself to the way it should be manually.
+I setup the with "debian-live-11.2.0-amd64-xfce+nonfree.iso" that was put on an USB stick. After that I installed the OS normally and everything went fine. After that I installed a few programs like SSH, Vagrant and Virtualbox. Virtualbox was not available in the Debian repo so I had to go with their instructions that were on their [site](https://wiki.debian.org/VirtualBox). Next, I took the Vagrantfile from Jami Lohilahti's homework on Vagrant and multiple machines. Next up was putting the the master machine itself to the way it should be manually.
 
-However, when I tried to set the vagrantfile with a static IP, no matter what I put in as a static IP the creating of the virtual machines is stopped. So now, as this is kind of the same problem as before I'm going to simulate the project without Vagrant and actually using the master laptop and a virtual linux with my desktop PC.
+However, when I tried to set the Vagrantfile with a static IP, no matter what I put in as a static IP the creating of the virtual machines is stopped. Later I realised that I don't even need a static IP for the minions, only the Salt-master needs an IP that is known to the minions. So all in all my earlier struggles were actually pointless, had I only realised the IP thing earlier.
 
+I got it all running in a way that boots 4 Vagrant machines up and automatically updates them and installs Salt-minion and connects it to the master. All credits from this go to Jami Lohilahti and his configuration. I would link the article but its password-protected. I'll share the few scripts used with the automation process. Everything with Vagrant works now so I'm easily able to simulate 1 master PC and 4 minions. I'll put the scipts used under this. Those are all you need to automate Vagrant machines setting up as minions.
 
-So at the start I was not sure about what programs should be installed. Now I've decided on Git, SSH, Apache2, Micro, Nano and Flameshot. Now I'll install and configure them automatically before making each of them a Salt-state. UPDATE 16.5 for the programs that will be installed, I'll add important tools curl and wget.
-
-
-## Installing Apache manually
-First I went with Apache. I installed it with "sudo apt-get install apache2" and started of with changing the default homepage in Apache. That is done by changing the file /var/www/html/index.html. After that I enabled user directories as well as changed my own homepage. Changing the users homepage is done by creating /public_html/index.html file.
-
-![Apache](https://i.imgur.com/pgfLGwb.png)
-
-Older picture, realised it didn't contain enough info: https://i.imgur.com/2iMnnH1.pn
-
-![userdir](https://i.imgur.com/uX4Pou9.png)
-
-
-Now I should move on to automating it all with a Salt-state. Obviously I need to install Salt-master first which is done by "sudo apt-get install salt-master".
-
-### UPDATE ABOUT VAGRANT 16.5
-So with changing the Vagrantfile from Tero's to my classmate Jami's one. I got it all running in a way that boots 4 Vagrant machines up and automatically updates them and installs Salt-minion and connects it to the master. All credits from this go to Jami Lohilahti and his configuration. I would link the article but its password-protected. I'll share the few scripts used with the automation process. Everything with Vagrant works now so I'm easily able to simulate 1 master PC and 4 minions. 
-
-The first script is used incase you want to set up one of your Vagrant machines as the Salt-master.
+The first script(salt-master.sh) is used in case you want to set up one of your Vagrant machines as the Salt-master.
 
 		#!/bin/bash
 		
@@ -37,7 +20,7 @@ The first script is used incase you want to set up one of your Vagrant machines 
 		
 		mkdir -p /srv/salt
 
-The other one is used to setup the minions automatically and configure the /etc/salt/minion file.
+The other one(salt-minion.sh) is used to setup the minions automatically and configure the /etc/salt/minion file.
 
 		#!/bin/bash
 		
@@ -55,6 +38,21 @@ The last one is the prov.sh which automatically updates the Vagrant machines.
 		apt-get update
 		
 
+So at the start I was not sure about what programs should be installed. Now I've decided on Git, SSH, Apache2, Micro, Nano and Flameshot. Now I'll install and configure them automatically before making each of them a Salt-state. UPDATE 16.5 for the programs that will be installed, I'll add important tools curl and wget.
+
+
+## Installing Apache manually
+
+First I went with Apache. I installed it with "sudo apt-get install apache2" and started of with changing the default homepage in Apache. That is done by changing the file /var/www/html/index.html. After that I enabled user directories as well as changed my own homepage. Changing the users homepage is done by creating /public_html/index.html file.
+
+![Apache](https://i.imgur.com/pgfLGwb.png)
+
+Older picture, realised it didn't contain enough info: https://i.imgur.com/2iMnnH1.pn
+
+![userdir](https://i.imgur.com/uX4Pou9.png)
+
+
+Now I should move on to automating it all with a Salt-state. Obviously I need to install Salt-master first which is done by "sudo apt-get install salt-master".
 
 #### Making Apache installation a Salt-state
 
