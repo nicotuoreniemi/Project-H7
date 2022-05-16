@@ -71,13 +71,13 @@ I accidentally ran the state on all the minions. After that I tried to run it ag
 ![state](https://i.imgur.com/1cIHZN5.png)
 
 
-##### Installing Git
+### Installing Git
 
-So I've actually installed git for the master so that I'm able to write this while doing the project. Just like with Apache, first I'll create the folder for Git in /srv/salt. In there I need the init.sls file aswell. Right now I'm not going to do any configurations for Git so it will just be a simple pkg.installed inside the init.slsI'll just test the state with 'vg03' this time.
+So I've actually installed git for the master so that I'm able to write this while doing the project. Just like with Apache, first I'll create the folder for Git in /srv/salt. In there I need the init.sls file aswell. Right now I'm not going to do any configurations for Git so it will just be a simple pkg.installed inside the init.sls. I'll just test the state with 'vg03' this time.
 
 ![vg03](https://i.imgur.com/q6ONOw8.png)
 
-###### Installing and configuring Nano
+### Installing and configuring Nano
 
 Just like Git, I've got Nano already installed on the master. Now I just need to configure it to my liking. The default configuration file is in /etc/nanorc. In there I switched a few things like put on linenumber and automatic backups on. Now I need to automate it with salt. I'll create a directory /srv/salt/nano. In there I need the init.sls and also the configuration file from /etc/nanorc.
 
@@ -89,7 +89,7 @@ Again, I'll test it on minion vg03.
 
 Everything seems to be working.
 
-####### Installing and configuring SSH
+### Installing and configuring SSH
 
 Like the others, I've manually already installed SSH but not configured it. I'll change the configuration to default to a different port than 22. First I'll go and change the configuration file in /etc/ssh/sshd_config. I changed it to port 5431. Then I tested that it worked on the master as it should.
 
@@ -102,7 +102,7 @@ Next up, I needed to create a directory for the state. Like the others, its /srv
 I'll test this one with the minion vg03 aswell. After this I noticed that obviously changing SSH configuration has an effect on me being able to use SSH with Vagrant. I'll be able to focus more on it later but for now, I'll change the port back to the default one. I had already applied the state with the wrong number so I needed to apply the state again after making changes to the configuration. However to use my setup with any of the ports wanted for SSH, only that number will need to be changed in the configuration file.
 
 
-######## Installing Flameshot and configuring it
+### Installing Flameshot and configuring it
 
 This is getting kind of old but I already installed Flameshot to take screenshots for this report. Now I'll manually configure it and after that I'll automate it all with Salt. With flameshot, the configuration file is a bit different since it's always in the users home directory(~/.config/flameshot/flameshot.ini). I changed the program to always start when the pc is started up and changed a custom savepath ~/Flameshot SS.
 
@@ -112,7 +112,7 @@ I tested applying the state but there seems to be a problem with the configurati
 
 ![flame](https://i.imgur.com/3SIHTrY.png)
 
-######## Installing Micro, Wget and Curl
+### Installing Micro, Wget and Curl
 
 Same old story, I've already installed Micro but I have not configured it at all. It's in the same place as Flameshots configuration file, in ~/.config directory. Because of this I'm not sure how to apply the changes for each minion with Salt. 
 
@@ -123,13 +123,13 @@ After trying the state on vg03, everything else worked except installing Micro. 
 ![micro](https://i.imgur.com/CmbjbxA.png)
 
 
-######## Some additional things
+### Some additional things
 
 I decided that since its a company I'm simulating, it would be nice that they have the same desktop wallpaper on them. For this I figured I could use a program called xwallpaper to automate it. I tried it out but no luck, nothing seemed to change with it, no matter what I did. So I unfortunately didn't find a way to automate this.
 
 I was also interested in configuring filesharing from the master to the minions. After looking around official Salt documents I found out that you can copy any files from the master to the minions with a single command. In my mind that was actually enough as the master is able to copy whatever they want on to the minions computer. The command used for this is "salt-cp '*' [ options ] SOURCE [SOURCE2 SOURCE3 ...] DEST".
 
-######## Setting up UFW for and making a Salt-state for it
+### Setting up UFW for and making a Salt-state for it
 
 Since I'm simulatin a business, I guess it would be smart to have a firewall. I'll start by installing it manually and making a few configurations to it. First, I allowed a few ports with the command "sudo ufw allow portnumber". I used 80, 22, and 443. These are for SSH and Apache2.
 
@@ -146,7 +146,7 @@ Now I started to run to some error with my Vagrant machines so I decided to dest
 
 
 
-######### Finishing up
+### Finishing up
 
 So now, it all is starting to be ready. I have configured states for Apache, Flameshot, Git, Nano, UFW, SSH, Micro, Wget and Curl. Now I just need to create top.sls file in the /srv/salt directory that tells which states will be applied with it. In the top.sls I put in all the states I have created while doing this project.
 
