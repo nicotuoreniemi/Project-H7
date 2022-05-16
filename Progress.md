@@ -15,14 +15,16 @@ So at the start I was not sure about what programs should be installed. Now I've
 
 
 ## Installing Apache manually
-First I went with Apache. I installed it with "sudo apt-get install apache2" and started of with changing the default homepage in Apache. After that I enabled user directories as well as changed my own homepage.
+First I went with Apache. I installed it with "sudo apt-get install apache2" and started of with changing the default homepage in Apache. That is done by changing the file /var/www/html/index.html. After that I enabled user directories as well as changed my own homepage. Changing the users homepage is done by creating /public_html/index.html file.
 
-![Apache](https://i.imgur.com/2iMnnH1.png)
+![Apache](https://i.imgur.com/pgfLGwb.png)
+
+Older picture, realised it didn't contain enough info: https://i.imgur.com/2iMnnH1.pn
 
 ![userdir](https://i.imgur.com/uX4Pou9.png)
 
 
-Now I should move on to automating it all with a Salt-state. Obviously I need to install Salt-master first.
+Now I should move on to automating it all with a Salt-state. Obviously I need to install Salt-master first which is done by "sudo apt-get install salt-master".
 
 ### UPDATE ABOUT VAGRANT 16.5
 So with changing the Vagrantfile from Tero's to my classmate Jami's one. I got it all running in a way that boots 4 Vagrant machines up and automatically updates them and installs Salt-minion and connects it to the master. All credits from this go to Jami Lohilahti and his configuration. I would link the article but its password-protected. I'll share the few scripts used with the automation process. Everything with Vagrant works now so I'm easily able to simulate 1 master PC and 4 minions. 
