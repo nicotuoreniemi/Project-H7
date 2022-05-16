@@ -47,7 +47,7 @@ First I went with Apache. I installed it with "sudo apt-get install apache2" and
 
 ![Apache](https://i.imgur.com/pgfLGwb.png)
 
-Older picture, realised it didn't contain enough info: https://i.imgur.com/2iMnnH1.pn
+Older picture, realised it didn't contain enough info: https://i.imgur.com/2iMnnH1.png
 
 ![userdir](https://i.imgur.com/uX4Pou9.png)
 
