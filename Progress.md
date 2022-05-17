@@ -60,6 +60,7 @@ First, I need to create a directory /srv/salt. This is where all the states will
 
 ![init.sls](https://i.imgur.com/2fl4LdQ.png)
 
+In the above picture is the init.sls for Apache2. First it configures that apache2 package, then it copies my updated index.html file from the salt-master to the minions /var/www/html/ directory. After that it enables the user specific homepages and finally it restarts the service.
 
 
 After this, I'll copy my already manually configured and tested file in there aswell. Now I'll test the file on slave vg04. It seems that atleast the files are being changed as they are supposed to.
@@ -106,7 +107,7 @@ I'll test this one with the minion vg03 aswell. After this I noticed that obviou
 
 This is getting kind of old but I already installed Flameshot to take screenshots for this report. Now I'll manually configure it and after that I'll automate it all with Salt. With flameshot, the configuration file is a bit different since it's always in the users home directory(~/.config/flameshot/flameshot.ini). I changed the program to always start when the pc is started up and changed a custom savepath ~/Flameshot SS.
 
-![flameshot](https://i.imgur.com/Ru2vETT.png)
+![flameshot](https://i.imgur.com/inTI1v0.png)
 
 I tested applying the state but there seems to be a problem with the configuration since the configuration file itself is in the home directory. I'll comeback to this later.
 
@@ -131,19 +132,19 @@ I was also interested in configuring filesharing from the master to the minions.
 
 ### Setting up UFW for and making a Salt-state for it
 
-Since I'm simulatin a business, I guess it would be smart to have a firewall. I'll start by installing it manually and making a few configurations to it. First, I allowed a few ports with the command "sudo ufw allow portnumber". I used 80, 22, and 443. These are for SSH and Apache2.
+Since I'm simulating a business, I guess it would be smart to have a firewall. I'll start by installing it manually and making a few configurations to it. First, I allowed a few ports with the command "sudo ufw allow portnumber". I used 80, 22, and 443. These are for SSH and Apache2.
 
 ![ufw](https://i.imgur.com/Umq9JIF.png)
 
 Now I'll need to make the Salt-state. I started by creating directory for UFW called /srv/salt/ufw. In there I would need the init.sls and three separate configuration files that UFW uses. Those files are in /etc/ufw and they are user.rules, user6.rules and ufw.conf. I made the same files in the /srv/salt/ufw folder.
 
+The init.sls file installs the ufw package, then copies the updated configuration files from the Salt-master to the minions /etc/ufw directory. Lastly it restarts the service if any of the files are updated.
+
 ![ufw](https://i.imgur.com/a4nicfN.png)
 
-Now I started to run to some error with my Vagrant machines so I decided to destroy them and create new ones. I'll test the UFW state on the vg01 machine.
+Now I started to run to some errors with my Vagrant machines so I decided to destroy them and create new ones. I'll test the UFW state on the vg01 machine.
 
 ![testii](https://i.imgur.com/DyL01RJ.png)
-
-
 
 
 ### Finishing up
@@ -157,6 +158,22 @@ So, I had my 4 Vagrant minions all up and running and I applied the top.sls. Eve
 
 
 ![finished](https://i.imgur.com/u8jRof8.png)
+
+After running it once, just to be sure I'm gonna apply the state once again. This time I'll only apply it to one of the Vagrant machines to save time. Applying the state to all 4 clean Vagrant machines takes a bit of time. So everything went smootly again, only the Flameshot configuration fails.
+
+![reappliedstate](https://i.imgur.com/fzYj0et.png)
+
+Now I'll destroy one machine and make one more apply to a fully empty machine. Everything seemed to work fine.
+
+![vg01](https://i.imgur.com/Jt6ZVYe.png)
+
+![apache2](https://i.imgur.com/qdT2QxA.png)
+
+I created the /public_html/index.html file to the Vagrant just to test that the user specific homepages work.
+
+I'm not gonna waste space my taking screenshots from every program but Nano works fine with the updated config file, the UFW rules were updated as they should be, everything seemed just fine.
+
+For now, I'm going to write the instructions on how to use this setup I've created as well as upload the files to github.
 
 
 
