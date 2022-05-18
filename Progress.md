@@ -1,6 +1,6 @@
 # Progress in the project
 
-So, for my project there is a fictional small company that has a problem managing all of their computers. In my project, I'm going to solve that using Salt. Every computer will be managed from a master computer using Salt-states. The computers will be set up with company decided default programs and configurations. This way the set up will be near automatic and done with one command.
+So, for my project last assingment in this [course](https://terokarvinen.com/2021/configuration-management-systems-2022-spring/) there is a fictional small company that has a problem managing all of their computers. In my project, I'm going to solve that using Salt. Every computer will be managed from a master computer using Salt-states. The computers will be set up with company decided default programs and configurations. This way the set up will be near automatic and done with one command.
 
 Since it's a fictional problem, I'm going to simulate a small company myself using virtual machines with Vagrant. I'll start the whole thing with an empty virtual Linux.
 
@@ -224,3 +224,15 @@ Nano works fine with the updated config file, the UFW rules were updated as they
 ![sshh](https://i.imgur.com/2AOJrMe.png)
 
 For now, I'm going to write the instructions on how to use this setup I've created as well as upload the files to github.
+
+
+### Source used in the project
+
+https://www.cyberciti.biz/faq/how-to-configure-firewall-with-ufw-on-ubuntu-20-04-lts/
+
+https://linuxhint.com/configure_nano_text_editor_nanorc/
+
+https://terokarvinen.com/oldsite/install_apache_on_ubuntu.html?fromSearch=apache
+
+
+
