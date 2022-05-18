@@ -10,7 +10,55 @@ I setup the with "debian-live-11.2.0-amd64-xfce+nonfree.iso" that was put on an 
 
 However, when I tried to set the Vagrantfile with a static IP, no matter what I put in as a static IP the creating of the virtual machines is stopped. Later I realised that I don't even need a static IP for the minions, only the Salt-master needs an IP that is known to the minions. So all in all my earlier struggles were actually pointless, had I only realised the IP thing earlier.
 
-I got it all running in a way that boots 4 Vagrant machines up and automatically updates them and installs Salt-minion and connects it to the master. All credits from this go to Jami Lohilahti and his configuration. I would link the article but its password-protected. I'll share the few scripts used with the automation process. Everything with Vagrant works now so I'm easily able to simulate 1 master PC and 4 minions. I'll put the scipts used under this. Those are all you need to automate Vagrant machines setting up as minions.
+I got it all running in a way that boots 4 Vagrant machines up and automatically updates them and installs Salt-minion and connects it to the master. All credits from this go to Jami Lohilahti and his configuration. I would link the article but its password-protected. I'll share the few scripts used with the automation process. Everything with Vagrant works now so I'm easily able to simulate 1 master PC and 4 minions. I'll put the scipts as well as the vagrantfile used under this. Those are all you need to automate Vagrant machines setting up as minions.
+
+The vagrantfile looks like this.
+
+		Vagrant.configure("2") do |config|
+		  config.vm.synced_folder ".", "/vagrant", disabled: true
+		  config.vm.synced_folder "shared/", "/home/vagrant/shared", create: true
+		  config.vm.provision "shell", path: "prov.sh"
+		 
+		  config.vm.box = "debian/bullseye64"
+		 
+		 
+		  # Pakota pienet resurssit
+		  config.vm.provider "virtualbox" do |vb|
+		    vb.memory = 1024
+		    vb.cpus = 1
+		  end
+		 
+		  # Master
+		  config.vm.define "vg01" do |vg01|
+		    vg01.vm.hostname = "vg01"
+		      # Saltin master-asennus
+		    # Saltin minion-asennus
+		    vg01.vm.provision "shell", path: "salt-minion.sh"
+		  end
+		 
+		  # Minion 1
+		  config.vm.define "vg02" do |vg02|
+		    vg02.vm.hostname = "vg02"
+		    # Saltin minion-asennus
+		    vg02.vm.provision "shell", path: "salt-minion.sh"
+		  end
+		 
+		  # Minion 2
+		  config.vm.define "vg03" do |vg03|
+		    vg03.vm.hostname = "vg03"
+		    # Saltin minion-asennus
+		    vg03.vm.provision "shell", path: "salt-minion.sh"
+		  end
+		 
+		  # Minion 3
+		  config.vm.define "vg04" do |vg04|
+		    vg04.vm.hostname = "vg04"
+		    # Saltin minion-asennus
+		    vg04.vm.provision "shell", path: "salt-minion.sh"
+		  end
+		 
+		end
+		
 
 The first script(salt-master.sh) is used in case you want to set up one of your Vagrant machines as the Salt-master.
 
@@ -80,7 +128,7 @@ So I've actually installed git for the master so that I'm able to write this whi
 
 ### Installing and configuring Nano
 
-Just like Git, I've got Nano already installed on the master. Now I just need to configure it to my liking. The default configuration file is in /etc/nanorc. In there I switched a few things like put on linenumber and automatic backups on. Now I need to automate it with salt. I'll create a directory /srv/salt/nano. In there I need the init.sls and also the configuration file from /etc/nanorc.
+Just like Git, I've got Nano already installed on the master. Now I just need to configure it to my liking. The default configuration file is in /etc/nanorc. In there I switched a few things like put on linenumbers and automatic backups. Now I need to automate it with salt. I'll create a directory /srv/salt/nano. In there I need the init.sls and also the configuration file from /etc/nanorc.
 
 ![nano](https://i.imgur.com/1IwpCtD.png)
 
@@ -171,11 +219,8 @@ Now I'll destroy one machine and make one more apply to a fully empty machine. E
 
 I created the /public_html/index.html file to the Vagrant just to test that the user specific homepages work.
 
-I'm not gonna waste space my taking screenshots from every program but Nano works fine with the updated config file, the UFW rules were updated as they should be, everything seemed just fine.
+Nano works fine with the updated config file, the UFW rules were updated as they should be, everything seemed just fine. I was able to uses ssh aswell without any problems.
+
+![sshh](https://i.imgur.com/2AOJrMe.png)
 
 For now, I'm going to write the instructions on how to use this setup I've created as well as upload the files to github.
-
-
-
-
-I'll continue to report on the progress of the project when I get more of a start with it.
