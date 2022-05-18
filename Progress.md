@@ -12,7 +12,7 @@ However, when I tried to set the Vagrantfile with a static IP, no matter what I 
 
 I got it all running in a way that boots 4 Vagrant machines up and automatically updates them and installs Salt-minion and connects it to the master. All credits from this go to Jami Lohilahti and his configuration. I would link the article but its password-protected. I'll share the few scripts used with the automation process. Everything with Vagrant works now so I'm easily able to simulate 1 master PC and 4 minions. I'll put the scipts as well as the vagrantfile used under this. Those are all you need to automate Vagrant machines setting up as minions.
 
-The vagrantfile looks like this.
+The vagrantfile looks like this. As I said earlier, instead of using one of the Vagrant machines as a master, I'm using them all as minions.
 
 		Vagrant.configure("2") do |config|
 		  config.vm.synced_folder ".", "/vagrant", disabled: true
