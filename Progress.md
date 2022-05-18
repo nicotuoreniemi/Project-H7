@@ -219,7 +219,7 @@ Now I'll destroy one machine and make one more apply to a fully empty machine. E
 
 I created the /public_html/index.html file to the Vagrant just to test that the user specific homepages work.
 
-Nano works fine with the updated config file, the UFW rules were updated as they should be, everything seemed just fine. I was able to uses ssh aswell without any problems.
+Nano works fine with the updated config file, the UFW rules were updated as they should be, everything seemed just fine. I was able to use SSH aswell without any problems.
 
 ![sshh](https://i.imgur.com/2AOJrMe.png)
 
